@@ -6,7 +6,7 @@ services:
     volumes:
       - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile
     ports:
       - '49201:80'
