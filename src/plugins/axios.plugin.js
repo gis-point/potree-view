@@ -1,4 +1,4 @@
-import axios from "axios/index";
+import axios from "axios";
 
 import { UrlInterceptor } from "../interseptors/url.interseptor";
 import { TokenInterceptor } from "../interseptors/token.interseptor";
