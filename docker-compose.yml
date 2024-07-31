@@ -1,22 +1,8 @@
-version: '3.8'
+version: '3.7'
 
 services:
-  potree-frontend:
-    container_name: potree-frontend
-    env_file:
-      - stack.env
+  blanball-fe-testing:
+    container_name: blanball-fe-testing
     build: .
-    expose:
-      - "80"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.potree-frontend.rule=Host(`170.187.200.162`) && PathPrefix(`/`)"
-      - "traefik.http.routers.potree-frontend.entrypoints=websecure"
-      - "traefik.http.routers.potree-frontend.tls.certresolver=myresolver"
-      - "traefik.http.routers.potree-frontend.service=potree-frontend"
-      - "traefik.http.services.potree-frontend.loadbalancer.server.port=80"
-    networks:
-      - cryptodouble_server
-networks:
-  cryptodouble_server:
-    external: true
+    ports:
+      - '49201:49201'
