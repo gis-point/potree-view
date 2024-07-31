@@ -1,12 +1,22 @@
 version: '3.8'
 
 services:
-  potree-frontend-prod:
-    container_name: potree-frontend-prod
-    volumes:
-      - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - '49201:80'
+  potree-frontend:
+    container_name: potree-frontend
+    env_file:
+      - stack.env
+    build: .
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.potree-frontend.rule=Host(`170.187.200.162`) && PathPrefix(`/`)"
+      - "traefik.http.routers.potree-frontend.entrypoints=websecure"
+      - "traefik.http.routers.potree-frontend.tls.certresolver=myresolver"
+      - "traefik.http.routers.potree-frontend.service=potree-frontend"
+      - "traefik.http.services.potree-frontend.loadbalancer.server.port=80"
+    networks:
+      - cryptodouble_server
+networks:
+  cryptodouble_server:
+    external: true
