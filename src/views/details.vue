@@ -1,5 +1,5 @@
 <script setup>
-import * as THREE from "../assets/potree/libs/three.js/build/three.module.js";
+// import * as THREE from "../assets/potree/libs/three.js/build/three.module.js";
 
 import { WebSocketTypes } from "../workers/web-socket-worker/web.socket.types";
 
@@ -14,31 +14,35 @@ import { API } from "../workers/api-worker/api.worker";
 const route = useRoute();
 
 onMounted(async () => {
-  window.viewer = new Potree.Viewer(
-    document.getElementById("potree_render_area")
-  );
+  setTimeout(async () => {
+    window.viewer = new Potree.Viewer(
+      document.getElementById("potree_render_area")
+    );
 
-  viewer.setEDLEnabled(true);
-  viewer.setFOV(60);
-  viewer.setPointBudget(1_000_000);
-  viewer.loadSettingsFromURL();
+    viewer.setEDLEnabled(true);
+    viewer.setFOV(60);
+    viewer.setPointBudget(1_000_000);
+    viewer.loadSettingsFromURL();
 
-  viewer.setDescription("Loading Octree of LAS files");
+    viewer.setDescription("Loading Octree of LAS files");
 
-  viewer.loadGUI(() => {
-    viewer.setLanguage("en");
-    $("#menu_appearance").next().show();
-    // viewer.toggleSidebar();
-  });
-  const response = await API.AuthorizationService.LasFileDetails(
-    route.params.name
-  );
+    viewer.loadGUI(() => {
+      viewer.setLanguage("en");
+      $("#menu_appearance").next().show();
+      // viewer.toggleSidebar();
+    });
+    const response = await API.AuthorizationService.LasFileDetails(
+      route.params.name
+    );
 
-  response.data.all_splited_and_converted_folders_paths.map((folderPath) => {
-    return `${response.data.absolute_converted_las_files_base_path}/${folderPath}/metadata.json`;
-  }).forEach((folderPath) => {
-    loadPointCloud(folderPath);
-  })
+    response.data.all_splited_and_converted_folders_paths
+      .map((folderPath) => {
+        return `${response.data.absolute_converted_las_files_base_path}/${folderPath}/metadata.json`;
+      })
+      .forEach((folderPath) => {
+        loadPointCloud(folderPath);
+      });
+  }, 2000);
 });
 
 const handleMessageGeneral = (instance) => {
@@ -46,19 +50,19 @@ const handleMessageGeneral = (instance) => {
 };
 
 const loadPointCloud = async (metaDataFile) => {
-  await Potree.loadPointCloud(metaDataFile, "lion", async function (e) {
-      viewer.scene.addPointCloud(e.pointcloud);
+  await window.Potree.loadPointCloud(metaDataFile, "lion", async function (e) {
+    viewer.scene.addPointCloud(e.pointcloud);
 
-      let material = e.pointcloud.material;
-      material.size = 1;
-      material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+    let material = e.pointcloud.material;
+    material.size = 1;
+    material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 
-      e.pointcloud.position.x += 3;
-      e.pointcloud.position.y -= 3;
-      e.pointcloud.position.z += 4;
+    e.pointcloud.position.x += 3;
+    e.pointcloud.position.y -= 3;
+    e.pointcloud.position.z += 4;
 
-      viewer.fitToScreen();
-    });
+    viewer.fitToScreen();
+  });
 };
 
 try {
@@ -77,3 +81,4 @@ try {
 </template>
 
 <style scoped></style>
+../../public/assets/potree/libs/three.js/build/three.module.js
