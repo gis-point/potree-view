@@ -6,7 +6,7 @@ import { ResponseInterceptor } from "../interseptors/response.interseptor";
 
 const createApi = () => {
   const axiosInstance = axios.create({
-    baseURL: "http://localhost:8000/api/v1",
+    baseURL: "http://170.187.200.162:8000/api/v1",
   });
 
   axiosInstance.interceptors.request.use(UrlInterceptor);
