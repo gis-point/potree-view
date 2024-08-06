@@ -1,7 +1,4 @@
 <script setup>
-// import * as THREE from "../assets/potree/libs/three.js/build/three.module.js";
-
-import { WebSocketTypes } from "../workers/web-socket-worker/web.socket.types";
 
 import { GeneralSocketWorkerInstance } from "../workers/web-socket-worker";
 
@@ -20,8 +17,8 @@ onMounted(async () => {
     );
 
     viewer.setEDLEnabled(true);
-    viewer.setFOV(60);
-    viewer.setPointBudget(1_000_000);
+    viewer.setFOV(10);
+    viewer.setPointBudget(2_000_000);
     viewer.loadSettingsFromURL();
 
     viewer.setDescription("Loading Octree of LAS files");
@@ -29,7 +26,6 @@ onMounted(async () => {
     viewer.loadGUI(() => {
       viewer.setLanguage("en");
       $("#menu_appearance").next().show();
-      // viewer.toggleSidebar();
     });
     const response = await API.AuthorizationService.LasFileDetails(
       route.params.name
